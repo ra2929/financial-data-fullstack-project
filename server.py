@@ -105,7 +105,7 @@ def index():
   """
 
   # DEBUG: this is debugging code to see what request looks like
-  print(request.args)
+  print("Request Args: " + str(request.args))
 
 
   #
