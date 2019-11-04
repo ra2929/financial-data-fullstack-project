@@ -16,7 +16,7 @@ from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response
 import pdb;
 
-tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '/home/rbd2127/project1/w4111-proj1/templates')
 
 app = Flask(__name__, template_folder=tmpl_dir)
 
