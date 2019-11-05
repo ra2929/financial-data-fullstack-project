@@ -1,4 +1,4 @@
-window.onload = function() {
+function() {
 
 var options = {
 	animationEnabled: true,
