@@ -1,28 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Financial Database project</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</head>
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
 
 <body>
-<nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
-  <ul class="navbar-nav">
-    <li class="nav-item active">
-      <a class="nav-link" href="#">Financial Data</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Home</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Next</a>
-    </li>
-  </ul>
-</nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart" id="bargraph">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<p><a href="another">Go to the other page</a></p>
+
+<form method="POST" action="/add">
+  <p>Ticker: <input type="text" name="ticker"> 
+  <P>Start Date (After: September 20, 2019):
+  <input type="date" name="date_start" min="2019-09-20"><br>
+  <p>End Date (Before: November 5, 2019)
+  <input type="date" name="date_end" max="2019-11-5"><br>
+  <p>
+  <input type="submit" value="Retrieve Chart"></p>
+</form>
+
 </body>
+
+
 </html>

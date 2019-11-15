@@ -1,3 +1,7 @@
+#Ruchit Desai
+#Ryan Anderson
+#COMS W4111 - PROJECT 1 - PART 3
+# ALL REFERENCES ARE NOTED AT THE BOTTOM OF THE FILE
 
 """
 Columbia's COMS W4111.001 Introduction to Databases
@@ -205,3 +209,11 @@ if __name__ == "__main__":
     app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
 
   run()
+
+'''
+REFERENCES:
+
+1. https://blog.heptanalytics.com/2018/08/07/flask-plotly-dashboard/
+    FLASK + PLOTLY INTEGRATION TUTORIAL
+2. 
+'''
