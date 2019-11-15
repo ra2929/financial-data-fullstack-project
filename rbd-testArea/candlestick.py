@@ -11,20 +11,12 @@ import glob
 #ticker =  db.Table('ticker', metadata, autoload = True, autoload_width = engine)
 
 #get dat file names
-path = r'https://github.com/ra2929/w4111-proj1/tree/master/csv_data_for_db'
-file_names = glob.glob(path + "/*.csv")
-
-csv_files = []
-
-#loop over csv files
-for filename in file_names:
-    df = pd.read_csv(filename)
-    csv_files.append(df)
-
+df = pd.read_csv('https://github.com/ra2929/w4111-proj1/tree/master/csv_data_for_db/AAPL.csv')
 
 #create candlestick chart
+
 graph = go.Figure(data = [go.Candlestick(x=df['Date'], open = df['AAPL.Open'], high=df['AAPL.High'],
-                        low = df['AAPL.Low'], close = df['AAPL.Close'])
-                        ])
+                        low = df['AAPL.Low'], close = df['AAPL.Close']
+                        )])
 
 graph.show()
