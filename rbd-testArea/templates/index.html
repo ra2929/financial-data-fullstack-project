@@ -32,8 +32,11 @@
     </div>
 
 <form method="POST" action="/sub" class="form-inline">
-  <label for="Ticker"> Ticker :  {{ticker}}  </label>
-  <input type="text" class="form-control" name="ticker">
+  <select selected>
+  {% for item in items %}
+  <option value="{{ item.field_name }}">{{ item.field_name }}</option>
+  {% endfor %}
+  </select>
   <label for="Start Date"> Start Date : {{startDate}}</label>
   <input type="Date" class="form-control" name="date_start" min="2019-09-20" value='2019-09-20'>
   <label for="End Date"> End Date : {{endDate}}</label>

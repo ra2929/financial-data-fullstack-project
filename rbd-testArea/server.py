@@ -107,12 +107,6 @@ def index():
   #
   # example of a database query
   #
-  cursor = g.conn.execute("SELECT name FROM test")
-  names = []
-  for result in cursor:
-    names.append(result['name'])  # can also be accessed using result[0]
-  cursor.close()
-
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
   # pass data to a template and dynamically generate HTML based on the data
@@ -144,9 +138,17 @@ def index():
   # for example, the below file reads template/index.html
   #
   """
+
+  cursor = g.conn.execute("SELECT ticker FROM Ticker")
+  tickers = []
+  for result in cursor:
+    tickers.append(result['ticker'])  # can also be accessed using result[0]
+  print(tickers)
+  cursor.close()
+
   #context = None #= dict(data = names)
 
-  return render_template("index.html")
+  return render_template("index.html", items=tickers)
 
 #
 # This is an example of a different path.  You can see it at:
@@ -176,7 +178,8 @@ def sub():
   #convert cursor items into a pandas DataFrame
   results       = pd.DataFrame(list(cursor), 
                   columns=['Close', 'High' , 'Low' , 'Volume' , 'p_implied_volatility' , 'p_ask_size' , 'p_bid_size' , 'Ticker' , 'Date' , 'Time'])
-  
+  cursor.close()
+  #print(results[:10])
   #merge date and time columns into datetime format for plotly
   results_dt    = results.apply(lambda r : pd.datetime.combine(r['Date'],r['Time']),1)
   results       = results.drop('Date', 1)
@@ -215,6 +218,7 @@ def create_plot(df):
   #fig = go.Figure([go.Scatter(x=df['datetime'], y=df['High'])])
   
   #Convert all data to Plotly-specific-JSON using Plotly's JSONEncoder.
+  
   graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
   return graphJSON
