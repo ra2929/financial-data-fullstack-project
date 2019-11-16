@@ -139,6 +139,12 @@ def index():
   #
   """
 
+  tickers = generate_list()
+  #context = None #= dict(data = names)
+
+  return render_template("index.html", items=tickers) #items changed to tickers
+
+def generate_list():
   cursor = g.conn.execute("SELECT ticker FROM Ticker")
   tickers = []
   for result in cursor:
@@ -146,10 +152,7 @@ def index():
   print(tickers)
   cursor.close()
 
-  #context = None #= dict(data = names)
-
-  return render_template("index.html", items=tickers)
-
+  return tickers
 #
 # This is an example of a different path.  You can see it at:
 # 
@@ -188,8 +191,17 @@ def sub():
   
   #Generate plotly Chart
   bar = create_plot(results)
-  
-  return render_template('index.html', plot=bar)
+
+  tickers = generate_list()
+  return render_template('index.html', plot=bar, items=tickers)
+
+#returns a list of ticker 
+def concate_ticker_info(request_name):
+  cursor = g.conn.execute("SELECT * FROM ticker T WHERE T.ticker = (%s)", request_name)
+  ticker_info = pd.DataFrame(cursor)
+  ticker_list = ticker_info.values.tolist()
+  header = str(ticker_list[0][0]) + " : " + str(ticker_list[0][1]) + "  " + str(ticker_list[0][2]) + "  " + str(ticker_list[0][3])
+  return header
 
 def create_plot(df):
   #generate list for hover text from pulled market data
@@ -213,7 +225,17 @@ def create_plot(df):
                   close=df['Close'],
                   text=hovertxt,
                   hoverinfo='text')])
-  fig.update_layout(autosize=True,height=1000, title=df['Ticker'][0]+' Market Data')
+                  
+  header = concate_ticker_info(df['Ticker'][0])
+  fig.update_layout(autosize=True,height=1000, title=header)
+
+  cs_color = fig.data[0]
+
+  # Set line and fill colors
+  cs_color.increasing.fillcolor = '#00BFFF'
+  cs_color.increasing.line.color = '#00BFFF'
+  cs_color.decreasing.fillcolor = '#737373'
+  cs_color.decreasing.line.color = '#737373'
   
   #fig = go.Figure([go.Scatter(x=df['datetime'], y=df['High'])])
   
