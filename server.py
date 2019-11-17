@@ -24,31 +24,6 @@ app           = Flask(__name__, template_folder=tmpl_dir)
 DATABASEURI   = "postgresql://rbd2127:group69db@35.243.220.243/proj1part2"
 engine        = create_engine(DATABASEURI)
 
-#
-# The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.
-#
-# XXX: The URI should be in the format of: 
-#
-#     postgresql://USER:PASSWORD@35.243.220.243/proj1part2
-#
-# For example, if you had username gravano and password foobar, then the following line would be:
-#
-#     DATABASEURI = "postgresql://gravano:foobar@35.243.220.243/proj1part2"
-#
-#
-# This line creates a database engine that knows how to connect to the URI above.
-#
-#
-# Example of running queries in your database
-# Note that this will probably not work if you already have a table named 'test' in your database, containing meaningful data. This is only an example showing you how to run queries in your database using SQLAlchemy.
-#
-#engine.execute("""CREATE TABLE IF NOT EXISTS test (
-#  id serial,
-#  name text
-#);""")
-#engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
-
-
 @app.before_request
 def before_request():
   """
@@ -76,110 +51,68 @@ def teardown_request(exception):
   except Exception as e:
     pass
 
+'''
+Function: index()
 
-#
-# @app.route is a decorator around index() that means:
-#   run index() whenever the user tries to access the "/" path using a GET request
-#
-# If you wanted the user to go to, for example, localhost:8111/foobar/ with POST or GET then you could use:
-#
-#       @app.route("/foobar/", methods=["POST", "GET"])
-#
-# PROTIP: (the trailing / in the path is important)
-# 
-# see for routing: http://flask.pocoo.org/docs/0.10/quickstart/#routing
-# see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
-#
+  Displays main website
+
+Return Type: render_template
+'''
 @app.route('/')
 def index():
-  """
-  request is a special object that Flask provides to access web request information:
-
-  request.method:   "GET" or "POST"
-  request.form:     if the browser submitted a form, this contains the data in the form
-  request.args:     dictionary of URL arguments, e.g., {a:1, b:2} for http://localhost?a=1&b=2
-
-  See its API: http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
-  # DEBUG: this is debugging code to see what request looks like
-  print("Request Args: " + str(request.args))
-
-
-  #
-  # example of a database query
-  #
-  #
-  # Flask uses Jinja templates, which is an extension to HTML where you can
-  # pass data to a template and dynamically generate HTML based on the data
-  # (you can think of it as simple PHP)
-  # documentation: https://realpython.com/blog/python/primer-on-jinja-templating/
-  #
-  # You can see an example template in templates/index.html
-  #
-  # context are the variables that are passed to the template.
-  # for example, "data" key in the context variable defined below will be 
-  # accessible as a variable in index.html:
-  #
-  #     # will print: [u'grace hopper', u'alan turing', u'ada lovelace']
-  #     <div>{{data}}</div>
-  #     
-  #     # creates a <div> tag for each element in data
-  #     # will print: 
-  #     #
-  #     #   <div>grace hopper</div>
-  #     #   <div>alan turing</div>
-  #     #   <div>ada lovelace</div>
-  #     #
-  #     {% for n in data %}
-  #     <div>{{n}}</div>
-  #     {% endfor %}
-  #
-  #
-  # render_template looks in the templates/ folder for files.
-  # for example, the below file reads template/index.html
-  #
-  """
-
   tickers = generate_list()
-  #context = None #= dict(data = names)
 
   return render_template("index.html", items=tickers) #items changed to tickers
 
+'''
+Function: generate_list()
+
+  Pulls list of tickers from the database
+
+Return Type: list() of str()
+'''
 def generate_list():
   cursor = g.conn.execute("SELECT ticker FROM Ticker")
   tickers = []
   for result in cursor:
     tickers.append(result['ticker'])  # can also be accessed using result[0]
-  print(tickers)
+  #print(tickers)
   cursor.close()
 
   return tickers
-#
-# This is an example of a different path.  You can see it at:
-# 
-#     localhost:8111/another
-#
-# Notice that the function name is another() rather than index()
-# The functions for each app.route need to have different names
-#
-@app.route('/options', methods=['GET', 'POST'])
-def options():
-  if request.method == 'POST':
-        # do stuff when the form is submitted
-        # redirect to end the POST handling
-        # the redirect can be to the same route or somewhere else
-      return redirect(url_for('index'))
 
-  # show the form, it wasn't submitted
-  return render_template("options.html")
+'''
+Function: sub()
 
+  Displays requested data after hitting Submit
 
-
+Return Type: render_template
+'''
 @app.route('/sub', methods=['POST'])
 def sub():
   #obtain form information from HTML
   ticker        = request.form['ticker']
   start_date    = request.form['date_start']
   end_date      = request.form['date_end']
+  choice        = request.form['selection']
+  
+  tickers = generate_list()
+
+  if (choice == 'options'):
+    cursor        = g.conn.execute("SELECT DISTINCT * FROM options_data O WHERE O.ticker=(%s) AND O.curr_date>=(%s) AND O.curr_date <=(%s) AND O.o_volume>=9000 ORDER BY O.curr_date, O.curr_time ASC", 
+                                ticker, 
+                                start_date, 
+                                end_date)
+
+    results       = pd.DataFrame(list(cursor), 
+                columns=['Strike', 'Options Symbol' , 'Postion' , 'Ask Price' , 'Bid Price' , 'Volume' , 'Open Interest' , 'Implied Volatility' , 'Ask Size' , 'Bid Size', 'Expiry', 'Ticker', 'Date', 'Time'])
+    cursor.close()
+
+    results       = results.drop('Ticker', 1)
+    results       = results.drop('Date', 1)
+    results       = results.drop('Time', 1)
+
+    return render_template("options.html", opt_data=results, items=tickers)
 
   #pull from database
   cursor        = g.conn.execute("SELECT * FROM price P WHERE P.ticker=(%s) AND P.curr_date>=(%s) AND P.curr_date <=(%s) ORDER BY P.curr_date, P.curr_time ASC", 
@@ -202,9 +135,18 @@ def sub():
   bar = create_plot(results)
 
   tickers = generate_list()
-  return render_template('index.html', plot=bar, items=tickers)
+  return render_template('index.html', plot=bar, opt_data=None, items=tickers)
 
 #returns a list of ticker 
+'''
+Function: concatenate_ticker_info()
+
+  args: Ticker Name
+  
+  Returns the header for Chart Pages
+
+Return Type: str()
+'''
 def concate_ticker_info(request_name):
   cursor = g.conn.execute("SELECT * FROM ticker T WHERE T.ticker = (%s)", request_name)
   ticker_info = pd.DataFrame(cursor)
@@ -212,6 +154,14 @@ def concate_ticker_info(request_name):
   header = str(ticker_list[0][0]) + " : " + str(ticker_list[0][1]) + "  " + str(ticker_list[0][2]) + "  " + str(ticker_list[0][3])
   return header
 
+'''
+Function: create_plot()
+  args: pandas DataFrame
+  
+  Converts pandas Dataframe into Plotly JSON object
+
+Return Type: JSON object
+'''
 def create_plot(df):
   #generate list for hover text from pulled market data
   hovertxt = []

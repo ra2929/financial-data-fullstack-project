@@ -35,8 +35,12 @@
         <input type="Date" class="form-control" name="date_start" min='2019-09-20' value='2019-09-20'>
         <label for="End Date"> End Date : {{endDate}}</label>
         <input type="Date" class="form-control" name="date_end"  max='2019-11-04' value='2019-11-04'>
-        <button type="submit" class="btn_submit"> Chart </button>
-        <button href="{{url_for('options')}}" class="btn-info">Options Data</button>
+        <label for="select"> Select :</label>
+        <select name="selection" >
+          <option value="chart">Chart</option>
+          <option value="options">Options Data</option>
+        </select>
+        <button type="submit" class="btn-info"> Submit </button>
       </form>
   </div>
 
@@ -46,6 +50,5 @@
           Plotly.plot('bargraph',graphs,{});
       </script>
     </div>
-
 </body>
 </html>
