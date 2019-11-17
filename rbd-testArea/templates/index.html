@@ -17,12 +17,9 @@
   <nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="https://github.com/ra2929/w4111-proj1">Financial Data</a>
+                <a class="nav-link" href="https://github.com/ra2929">Financial Data</a>
             </li>
-            <li class="nav-item">
-                <a href="http://0.0.0.0:8111" class="nav-link" href="#">Home</a>
-            </li>
-          
+
         </ul>
     </nav>
   <!--start of the ticker selection-->
@@ -38,7 +35,12 @@
         <input type="Date" class="form-control" name="date_start" min='2019-09-20' value='2019-09-20'>
         <label for="End Date"> End Date : {{endDate}}</label>
         <input type="Date" class="form-control" name="date_end"  max='2019-11-04' value='2019-11-04'>
-        <button type="submit" class="btn_submit">Submit</button>
+        <label for="select"> Select :</label>
+        <select name="selection" >
+          <option value="chart">Chart</option>
+          <option value="options">Options Data</option>
+        </select>
+        <button type="submit" class="btn-info"> Submit </button>
       </form>
   </div>
 
@@ -48,6 +50,5 @@
           Plotly.plot('bargraph',graphs,{});
       </script>
     </div>
-
 </body>
 </html>

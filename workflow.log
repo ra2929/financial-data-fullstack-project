@@ -1,7 +1,27 @@
 Databases Project 1 - Part 3 Log:
 --------------------------------------------------------------------
 <entry_user> rbd
-<entry_date_time> 2019-11-17 2:23
+<entry_date_time> 2019-11-16 20:00
+<entry>
+
+1. Todo:
+    a. Known Bugs:
+        1. Need default values for form -> Crashes if we just hit submit                        - COMPLETED
+        2. Test all tickers                                                                     - COMPLETED
+        3. Check for 0 value in price columns                                                   - REMOVED
+        4. Check on different computers / browsers.                                             - COMPLETED
+2. Features to be added:
+        1. 5m/15m Smoothing - http://benalexkeen.com/resampling-time-series-data-with-pandas/   - REMOVED
+        2. List Box w/ Tickers                                                                  - COMPLETED
+        3. Table based website for Options Data                                                 - COMPLETED
+        4. Generate Options data.                                                               - COMPLETED
+
+
+<end_entry>
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+<entry_user> rbd
+<entry_date_time> 2019-11-16 2:23
 <entry>
 
 1. Website working.
