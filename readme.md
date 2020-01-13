@@ -1,4 +1,4 @@
-# w4111-proj1
+# financial-data-fullstack-project
 
 ## about
 This was the course project for Introduction to Databases at Columbia University: http://www.cs.columbia.edu/~gravano/cs4111/Proj1-3/.
