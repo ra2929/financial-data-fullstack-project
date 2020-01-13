@@ -1,19 +1,22 @@
-#Ruchit Desai
-#Ryan Anderson
-#COMS W4111 - PROJECT 1 - PART 3
+# Ruchit Desai
+# Ryan Anderson
+# COMS W4111 - PROJECT 1 - PART 3
 # ALL REFERENCES ARE NOTED AT THE BOTTOM OF THE FILE
 
 import os
 import sys
+import json
+import click
 import datetime as dt
 import pandas as pd
-import numpy as np
+
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
+
 from flask import Flask, request, url_for, render_template, g, redirect, Response
+
 import plotly
 import plotly.graph_objs as go
-import json
 
 
 '''
@@ -21,7 +24,7 @@ INITIAL EXECUTION - SET UP WORKSPACE
 '''
 tmpl_dir      = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app           = Flask(__name__, template_folder=tmpl_dir)
-DATABASEURI   = "postgresql://rbd2127:group69db@35.243.220.243/proj1part2"
+DATABASEURI   = "postgresql://<user>:<pass>@<ip/port>/<database>"
 engine        = create_engine(DATABASEURI)
 
 @app.before_request
@@ -211,13 +214,12 @@ def login():
 
 
 if __name__ == "__main__":
-  import click
-
   @click.command()
   @click.option('--debug', is_flag=True)
   @click.option('--threaded', is_flag=True)
   @click.argument('HOST', default='0.0.0.0')
   @click.argument('PORT', default=8111, type=int)
+
   def run(debug, threaded, host, port):
     """
     This function handles command line parameters.
