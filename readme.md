@@ -1,7 +1,6 @@
 # financial-data-fullstack-project
 
 ## about
-This was the course project for Introduction to Databases at Columbia University: http://www.cs.columbia.edu/~gravano/cs4111/Proj1-3/.
 
 Goal: Develop a time-series database of stock and index prices with special attention to unusual options data.
 
